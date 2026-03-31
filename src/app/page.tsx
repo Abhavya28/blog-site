@@ -9,15 +9,15 @@ export default function Home() {
         <Link
           href="/blogs"
           className="px-8 py-4 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
-        >
+        >                              
           View Blogs
         </Link>
 
         <Link
-          href="/post"
+          href="/blogs/create"
           className="px-8 py-4 bg-green-600 text-white rounded-lg text-lg font-semibold hover:bg-green-700 transition"
         >
-          Create Post
+          Create Blog
         </Link>
       </div>
     </div>
