@@ -1,6 +1,4 @@
-
-
-import EditBlogForm from "./editBlogForm";
+import EditBlogForm from "@/src/components/editBlogForm";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const {id} = await params;

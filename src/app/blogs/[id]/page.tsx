@@ -1,11 +1,11 @@
+import DeleteBlogButton from '@/src/components/deleteBlogButton';
 import Link from 'next/link';
-import React from 'react'
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     const { id } = await params;
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/api?id=${id}`);
     const blog = await res.json()
-    console.log(blog, "blog");
+    // console.log(blog, "blog");
     if (!blog || !blog.id) {
         return <div>Blog not found</div>;
     }
@@ -28,6 +28,8 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 >
                     Edit Blog
                 </Link>
+
+                <DeleteBlogButton id={id} />
 
                 <Link
                     href={"/blogs"}

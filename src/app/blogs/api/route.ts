@@ -64,3 +64,22 @@ export async function PATCH(request: Request) {
     status: 201,
   });
 }
+
+
+export async function DELETE(request: Request) {
+  const { id } = await request.json();
+  const blogIndex = blogData.findIndex((b: any) => b.id === id);
+
+  if (blogIndex === -1) {
+    return new Response(JSON.stringify({ error: "Blog not found" }), {
+      status: 404,
+    });
+  }
+
+  const deletedBlog = blogData.splice(blogIndex,1);
+
+  return new Response(JSON.stringify(blogData), {
+    headers: { "Content-Type": "application/json" },
+    status: 201,
+  });
+}
