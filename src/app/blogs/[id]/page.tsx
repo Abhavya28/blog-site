@@ -23,6 +23,13 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
             <div className="mt-8 text-center">
                 <Link
+                    href={`/blogs/edit/${blog.id}`}
+                    className="mt-6 inline-block bg-yellow-400 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition"
+                >
+                    Edit Blog
+                </Link>
+
+                <Link
                     href={"/blogs"}
                     className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 transition shadow"
                 >
