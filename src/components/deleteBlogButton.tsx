@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "./ui/button";
 
 const DeleteBlogButton = ({ id }: { id: string }) => {
   const [message, setMessage] = useState("");
@@ -28,14 +29,11 @@ const DeleteBlogButton = ({ id }: { id: string }) => {
 
   return (
     <div className="inline-block">
-      {message && <p className="text-red-500 mb-2">{message}</p>}
-
-      <button
-        onClick={handleDelete}
-        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-      >
+      <Button onClick={handleDelete}>
         Delete Blog
-      </button>
+      </Button>
+
+      {message && <p className="text-red-500 mt-4">{message}</p>}
     </div>
   );
 };

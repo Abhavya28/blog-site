@@ -1,4 +1,6 @@
 import { blogData } from "@/src/utils/constant";
+import { writeFile } from "fs/promises";
+import path from "path";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -26,12 +28,34 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const blog = await request.json();
+  const blog = await request.formData();
+
+
+  const title = blog.get("title") as string;
+  const content = blog.get("content") as string;
+  const image = blog.get("image") as File;
+
+  let imagePath = "";
+
+  if (image && image.size > 0) {
+    const bytes = await image.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const fileName = `${Date.now()}-${image.name}`;
+
+    await writeFile(
+      path.join(process.cwd(), "public/uploads", fileName),
+      buffer,
+    );
+
+    imagePath = `/uploads/${fileName}`;
+  }
 
   const newBlog = {
     id: String(blogData.length + 1),
-    title: blog.title,
-    content: blog.content,
+    title: title,
+    content: content,
+    image: imagePath,
   };
 
   blogData.push(newBlog);
@@ -43,7 +67,13 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const { id, title, content } = await request.json();
+  const blog = await request.formData();
+
+  const id = blog.get("id") as string;
+  const title = blog.get("title") as string;
+  const content = blog.get("content") as string;
+  const image = blog.get("image") as File;
+
   const blogIndex = blogData.findIndex((b: any) => b.id === id);
 
   if (blogIndex === -1) {
@@ -52,11 +82,21 @@ export async function PATCH(request: Request) {
     });
   }
 
-  if(title){
-    blogData[blogIndex].title = title;
-  }
-  if(content){
-    blogData[blogIndex].content = content;
+  if (title) blogData[blogIndex].title = title;
+  if (content) blogData[blogIndex].content = content;
+
+  if (image && image.size > 0) {
+    const bytes = await image.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const fileName = `${Date.now()}-${image.name}`;
+
+    await writeFile(
+      path.join(process.cwd(), "public/uploads", fileName),
+      buffer,
+    );
+
+    blogData[blogIndex].image = `/uploads/${fileName}`;
   }
 
   return new Response(JSON.stringify(blogData[blogIndex]), {
@@ -64,7 +104,6 @@ export async function PATCH(request: Request) {
     status: 201,
   });
 }
-
 
 export async function DELETE(request: Request) {
   const { id } = await request.json();
@@ -76,7 +115,7 @@ export async function DELETE(request: Request) {
     });
   }
 
-  const deletedBlog = blogData.splice(blogIndex,1);
+  const deletedBlog = blogData.splice(blogIndex, 1);
 
   return new Response(JSON.stringify(blogData), {
     headers: { "Content-Type": "application/json" },

@@ -25,6 +25,7 @@ const page = async () => {
                 id={blog.id}
                 title={blog.title}
                 content={blog.content}
+                image={blog.image}
               />
             ))}
           </div>
